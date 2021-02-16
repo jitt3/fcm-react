@@ -1,7 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
+import {
+  requestPermission,
+  messaging
+} from './firebaseInit'
 function App() {
+  const [token, setToken] = React.useState("")
+  React.useEffect(() => {
+    requestPermission()
+      .then((token) => {
+        setToken(token)
+      })
+      .catch((err) => err)
+  }, [])
+
+  messaging.onMessage((payload) => {
+    const {notification: {title}} = payload
+    alert(title);
+  })
+console.log(token)
   return (
     <div className="App">
       <header className="App-header">
@@ -19,7 +37,7 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
